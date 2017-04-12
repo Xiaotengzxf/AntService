@@ -11,6 +11,7 @@ import IQKeyboardManagerSwift
 //import CocoaAsyncSocket
 
 //var sqlManager : SQLiteManager?
+var MODELITEM = ""
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate  {

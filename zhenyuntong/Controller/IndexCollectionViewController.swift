@@ -24,6 +24,7 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
                       "spgl" , "grzx" , "xtsz"]
     var bViewShow = false
     var workOrderCount = 0
+    var workFlowCount = 0
     @IBOutlet weak var modelItem: UIBarButtonItem!
     var page : TabPageViewController!
 
@@ -65,8 +66,10 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
                             if let data = object["msg"].string {
                                 if data == "0" {
                                     self?.modelItem.title = "办公模式"
+                                    MODELITEM = "办公模式"
                                 }else if data == "1" {
                                     self?.modelItem.title = "外出模式"
+                                    MODELITEM = "外出模式"
                                 }
                             }
                         }
@@ -102,6 +105,11 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
             if tag == 1 {
                 if let userInfo = notification.userInfo as? [String : Int] {
                     workOrderCount = userInfo["badge"] ?? 0
+                    collectionView?.reloadData()
+                }
+            }else if tag == 2 {
+                if let userInfo = notification.userInfo as? [String : Int] {
+                    workFlowCount = userInfo["badge"] ?? 0
                     collectionView?.reloadData()
                 }
             }else if tag >= 10 {
@@ -158,6 +166,13 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
                 if workOrderCount > 0 {
                     label.isHidden = false
                     label.text = "\(workOrderCount)"
+                }else{
+                    label.isHidden = true
+                }
+            }else if indexPath.row == 2 {
+                if workFlowCount > 0 {
+                    label.isHidden = false
+                    label.text = "\(workFlowCount)"
                 }else{
                     label.isHidden = true
                 }

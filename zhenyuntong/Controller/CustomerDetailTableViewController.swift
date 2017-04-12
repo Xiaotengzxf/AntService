@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Toaster
 
 class CustomerDetailTableViewController: UITableViewController {
 
@@ -185,13 +186,22 @@ class CustomerDetailTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 2 {
-            if let phone = data["phone"].string {
-                openUrlForCall(mobile: phone)
+            if MODELITEM == "外出模式" {
+                if let phone = data["mobile"].string {
+                    openUrlForCall(mobile: phone)
+                }
+            }else{
+                Toast(text: "请在首页将工作模式设置为外出模式").show()
             }
             
+            
         }else if indexPath.row == 3 {
-            if let mobile = data["mobile"].string {
-                openUrlForCall(mobile: mobile)
+            if MODELITEM == "外出模式" {
+                if let mobile = data["phone"].string {
+                    openUrlForCall(mobile: mobile)
+                }
+            }else{
+                Toast(text: "请在首页将工作模式设置为外出模式").show()
             }
         }
     }

@@ -69,8 +69,8 @@ class OrderDetailTableViewController: UITableViewController {
         action.addAction(UIAlertAction(title: "指派", style: .default, handler: {[weak self] (action) in
             self?.performSegue(withIdentifier: "userlist", sender: self)
         }))
-        action.addAction(UIAlertAction(title: "闭单", style: .default, handler: { (action) in
-            
+        action.addAction(UIAlertAction(title: "闭单", style: .default, handler: {[weak self] (action) in
+            self?.closeOrder()
         }))
         self.present(action, animated: true) { 
             
@@ -81,8 +81,8 @@ class OrderDetailTableViewController: UITableViewController {
     func handleNotification(notification : Notification) {
         if let tag = notification.object as? Int {
             if tag == 1 {
-                if let userInfo = notification.userInfo as? [String : Any] {
-                    let alert = UIAlertController(title: "指派给\(userInfo["nickname"] as? String ?? "")", message: nil, preferredStyle: .alert)
+                if let userInfo = notification.userInfo as? [String : JSON] {
+                    let alert = UIAlertController(title: "指派给\(userInfo["nickname"]?.string ?? "")", message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { [weak self] (action) in
                         if let desc = alert.textFields?.first?.text {
                             self?.assign(userInfo: userInfo, desc: desc)
@@ -102,9 +102,10 @@ class OrderDetailTableViewController: UITableViewController {
         }
     }
     
-    func assign(userInfo: [String : Any] , desc : String)  {
+    func assign(userInfo: [String : JSON] , desc : String)  {
         let hud = showHUD(text: "指派中...")
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWOAssign, params: ["tomove" : userInfo["id"] as? String ?? "" , "woId" : woId , "remarks" : desc]){
+        let tomove = userInfo["id"]?.string ?? ""
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWOAssign, params: ["tomove" : tomove , "woId" : woId , "remarks" : desc]){
             [weak self] (json , error) in
             hud.hide(animated: true)
             if let object = json {
@@ -199,7 +200,7 @@ class OrderDetailTableViewController: UITableViewController {
                     case 1:
                         label.text = detail["work_title"].string
                     case 2:
-                        label.text = ""
+                        label.text = detail["orderremark"].string
                     case 3:
                         label.text = detail["typename"].string
                     case 4:

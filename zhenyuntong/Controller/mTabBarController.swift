@@ -30,13 +30,19 @@ class mTabBarController: UITabBarController {
             if let object = json {
                 if let result = object["result"].int {
                     if result == 1000 {
+                        var count = 0
                         if let workOrderCount = object["data" , "WorkorderCount"].int {
+                            count += workOrderCount
                             if workOrderCount > 0 {
                                 self?.tabBar.items?[2].badgeValue = "\(workOrderCount)"
                             }else{
                                 self?.tabBar.items?[2].badgeValue = nil
                             }
                             NotificationCenter.default.post(name: Notification.Name(NotificationName.Index.rawValue), object: 1, userInfo: ["badge" : workOrderCount])
+                        }
+                        if let WorkflowCount = object["data" , "WorkflowCount"].int {
+                            count += WorkflowCount
+                            NotificationCenter.default.post(name: Notification.Name(NotificationName.Index.rawValue), object: 2, userInfo: ["badge" : WorkflowCount])
                         }
                     }
                 }

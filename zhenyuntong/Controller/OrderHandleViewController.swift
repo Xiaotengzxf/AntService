@@ -27,6 +27,7 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
     var image : UIImage?
     @IBOutlet weak var ivAccessory: UIImageView!
     @IBOutlet weak var lcHeight: NSLayoutConstraint!
+    var bFinished = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,14 +61,18 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
             Toast(text: "请选择下一步").show()
             return
         }
-        if to_user.characters.count == 0 {
+        if to_user.characters.count == 0 && !bFinished{
             Toast(text: "请选择指派人").show()
             return
         }
         let opinion = tvSuggestion.text
         let filepath = lblAccessory.text != "请选择" ? lblAccessory.text! : ""
         let hud = showHUD(text: "保存中...")
-        NetworkManager.installshared.upload(url: NetworkManager.installshared.appWFSaveHandle, params: ["wf_id" : "\(wfId)" , "opinion" : opinion ?? "" , "hand_wf_to" : to_user , "hand_result" : hand_result , "filepath" : filepath], data: (image != nil ? UIImageJPEGRepresentation(image!, 0.2) : nil)) {[weak self] (json, error) in
+        var params = ["wf_id" : "\(wfId)" , "opinion" : opinion ?? "" , "hand_result" : hand_result , "filepath" : filepath]
+        if !bFinished {
+            params["hand_wf_to"] = to_user
+        }
+        NetworkManager.installshared.upload(url: NetworkManager.installshared.appWFSaveHandle, params: params, data: (image != nil ? UIImageJPEGRepresentation(image!, 0.2) : nil)) {[weak self] (json, error) in
             hud.hide(animated: true)
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
@@ -137,8 +142,12 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
         if textField == idtfNext {
             for json in arrayStep {
                 if json["process_name"].stringValue == item {
-                    hand_result = json["id"].stringValue
-                    loadUser()
+                    if item == "完成" {
+                        bFinished = true
+                    }else{
+                        hand_result = json["id"].stringValue
+                        loadUser()
+                    }
                 }
             }
         } else {

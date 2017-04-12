@@ -215,12 +215,13 @@ class UserListTableViewController: UITableViewController, DZNEmptyDataSetDelegat
                 if let array = capital[indexes[indexPath.section]] {
                     let json = data[array[indexPath.row]]
                     if flag == 0 {
-                        NotificationCenter.default.post(name: Notification.Name(NotificationName.OrderDetail.rawValue), object: 1, userInfo: json?.dictionaryValue)
+                        let dict = json?.dictionaryValue
+                        NotificationCenter.default.post(name: Notification.Name(NotificationName.OrderDetail.rawValue), object: 1, userInfo: dict)
                     }else if flag == 1 {
                         NotificationCenter.default.post(name: Notification.Name("ordernew"), object: 1, userInfo: json?.dictionaryValue)
                     }
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
-                _ = self.navigationController?.popViewController(animated: true)
             }
         }
         

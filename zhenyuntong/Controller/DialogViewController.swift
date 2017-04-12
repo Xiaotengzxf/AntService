@@ -23,6 +23,7 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
     var start: TimeInterval = 0
     var end : TimeInterval = 0
     var personId = ""
+    var bSwitch = false
     
     override func awakeFromNib() {
         let timeZoneBias = 480 // (UTC+08:00)
@@ -168,13 +169,17 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
     }
     
     func presentedDateUpdated(_ date: CVDate) {
-        lblMonth.text = date.globalDescription
-        let d = CVDate(day: 0, month: date.month, week: 0, year: date.year, calendar: currentCalendar!)
-        currentMonth = d.month
-        let start = d.convertedDate(calendar: currentCalendar!)
-        self.start = startOfCurrentMonth(date: start!)!
-        self.end = endOfCurrentMonth(date: start!)!
-        loadData()
+        if bSwitch {
+            bSwitch = false
+        }else{
+            lblMonth.text = date.globalDescription
+            let d = CVDate(day: 0, month: date.month, week: 0, year: date.year, calendar: currentCalendar!)
+            currentMonth = d.month
+            let start = d.convertedDate(calendar: currentCalendar!)
+            self.start = startOfCurrentMonth(date: start!)!
+            self.end = endOfCurrentMonth(date: start!)!
+            loadData()
+        }
         
     }
     
@@ -183,11 +188,17 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
     }
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
-        if dayView.date.convertedDate(calendar: currentCalendar!)?.compare(Date()) == .orderedDescending {
-            
-        }else{
+        bSwitch = true
+        if dayView.isCurrentDay {
             selectedDay = dayView
             self.performSegue(withIdentifier: "dialognew", sender: self)
+        }else{
+            if dayView.date.convertedDate(calendar: currentCalendar!)?.compare(Date()) == .orderedDescending {
+                
+            }else{
+                selectedDay = dayView
+                self.performSegue(withIdentifier: "dialognew", sender: self)
+            }
         }
         
     }
@@ -234,6 +245,7 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
         
     }
     
+    // 判断是否为同一天
     func checkoutSameDay(dayView : DayView) -> Bool {
         if data.count > 0 {
             for json in data {
@@ -263,6 +275,7 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
 //        
 //    }
     
+    // 本月开始日期
     func startOfCurrentMonth(date : Date) -> TimeInterval? {
         let components = currentCalendar?.dateComponents([.year, .month], from: date)
         let startOfMonth = currentCalendar?.date(from: components!)

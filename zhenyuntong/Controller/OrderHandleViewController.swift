@@ -142,10 +142,10 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
         if textField == idtfNext {
             for json in arrayStep {
                 if json["process_name"].stringValue == item {
+                    hand_result = json["id"].stringValue
                     if item == "完成" {
                         bFinished = true
                     }else{
-                        hand_result = json["id"].stringValue
                         loadUser()
                     }
                 }

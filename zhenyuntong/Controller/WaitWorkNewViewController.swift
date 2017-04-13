@@ -46,6 +46,9 @@ class WaitWorkNewViewController: UIViewController, IQDropDownTextFieldDelegate ,
         vAccessory.layer.borderWidth = 0.5
         let tap = UITapGestureRecognizer(target: self, action: #selector(WaitWorkNewViewController.tap(recognizer:)))
         vAccessory.addGestureRecognizer(tap)
+        idtfType.isUserInteractionEnabled = false
+        idtfStep.isUserInteractionEnabled = false
+        idtfTo.isUserInteractionEnabled = false
         loadData(tid: 0, flag: 0)
     }
     
@@ -143,26 +146,49 @@ class WaitWorkNewViewController: UIViewController, IQDropDownTextFieldDelegate ,
         NetworkManager.installshared.request(type: .post, url: url, params: params){
             [weak self] (json , error) in
             if let object = json {
-                if let result = object["result"].int , result == 1000 {
-                    if let array = object["data"].array , array.count > 0{
+                if let result = object["result"].int {
+                    if result == 1000 {
+                        if let array = object["data"].array , array.count > 0{
+                            if flag == 0 {
+                                self?.dataType.removeAll()
+                                self?.dataType += array
+                                if self?.dataType.count ?? 0 > 0 {
+                                    self?.idtfType.itemList = self!.dataType.map{$0["t_name"].stringValue}
+                                    self?.idtfType.isUserInteractionEnabled = true
+                                }
+                                
+                            }else if flag == 1 {
+                                self?.dataStep.removeAll()
+                                self?.dataStep += array
+                                if self?.dataStep.count ?? 0 > 0 {
+                                    self?.idtfStep.itemList = self!.dataStep.map{$0["process_name"].stringValue}
+                                    self?.idtfStep.isUserInteractionEnabled = true
+                                }
+                            }else if flag == 2 {
+                                self?.dataTo.removeAll()
+                                self?.dataTo += array
+                                if self?.dataTo.count ?? 0 > 0 {
+                                    self?.idtfTo.itemList = self!.dataTo.map{$0["name"].stringValue}
+                                    self?.idtfTo.isUserInteractionEnabled = true
+                                }
+                            }
+                        }
+                    }else if result == 1004 {
                         if flag == 0 {
-                            self?.dataType += array
-                            if self?.dataType.count ?? 0 > 0 {
-                                self?.idtfType.itemList = self!.dataType.map{$0["t_name"].stringValue}
-                            }
+                            Toast(text: "工作流类型为空").show()
                         }else if flag == 1 {
-                            self?.dataStep += array
-                            if self?.dataStep.count ?? 0 > 0 {
-                                self?.idtfStep.itemList = self!.dataStep.map{$0["process_name"].stringValue}
-                            }
+                            Toast(text: "工作流步骤为空").show()
                         }else if flag == 2 {
-                            self?.dataTo += array
-                            if self?.dataTo.count ?? 0 > 0 {
-                                self?.idtfTo.itemList = self!.dataTo.map{$0["name"].stringValue}
-                            }
+                            Toast(text: "工作流指派为空").show()
+                        }
+                    }else{
+                        if let msg = object["msg"].string {
+                            Toast(text: msg).show()
                         }
                     }
                 }
+            }else{
+                Toast(text: "网络故障，请检查网络").show()
             }
         }
     }
@@ -188,5 +214,16 @@ class WaitWorkNewViewController: UIViewController, IQDropDownTextFieldDelegate ,
         }
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == idtfType {
+            
+        }else if textField == idtfStep {
+            
+        }else if textField == idtfTo {
+            
+        }else{
+            
+        }
+    }
 
 }

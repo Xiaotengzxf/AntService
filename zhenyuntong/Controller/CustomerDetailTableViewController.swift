@@ -214,5 +214,8 @@ class CustomerDetailTableViewController: UITableViewController {
         alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { (action) in
             UIApplication.shared.openURL(URL(string: "tel://\(mobile)")!)
         }))
+        self.present(alert, animated: true) { 
+            
+        }
     }
 }

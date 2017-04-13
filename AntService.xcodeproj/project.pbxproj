@@ -79,6 +79,7 @@
 		8978CAE11E90F0C000BBC926 /* WaitWorkClearViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8978CAE01E90F0C000BBC926 /* WaitWorkClearViewController.swift */; };
 		8978CAE31E921AB400BBC926 /* DialogDepTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8978CAE21E921AB400BBC926 /* DialogDepTableViewController.swift */; };
 		8978CAEB1E93D40900BBC926 /* WaitWorkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8978CAEA1E93D40800BBC926 /* WaitWorkTableViewCell.swift */; };
+		89847E251E9FD68D00B02D01 /* ic_home_banner.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 89847E241E9FD68D00B02D01 /* ic_home_banner.jpg */; };
 		8987F6871E8585B0008E54AD /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F6861E8585B0008E54AD /* QuoteTableViewController.swift */; };
 		8987F6891E858A84008E54AD /* QuoteDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F6881E858A84008E54AD /* QuoteDetailTableViewController.swift */; };
 		8987F68C1E860ADE008E54AD /* CallTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F68B1E860ADE008E54AD /* CallTableViewController.swift */; };
@@ -207,6 +208,7 @@
 		8978CAE01E90F0C000BBC926 /* WaitWorkClearViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitWorkClearViewController.swift; sourceTree = "<group>"; };
 		8978CAE21E921AB400BBC926 /* DialogDepTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogDepTableViewController.swift; sourceTree = "<group>"; };
 		8978CAEA1E93D40800BBC926 /* WaitWorkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitWorkTableViewCell.swift; sourceTree = "<group>"; };
+		89847E241E9FD68D00B02D01 /* ic_home_banner.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ic_home_banner.jpg; sourceTree = "<group>"; };
 		8987F6861E8585B0008E54AD /* QuoteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteTableViewController.swift; sourceTree = "<group>"; };
 		8987F6881E858A84008E54AD /* QuoteDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteDetailTableViewController.swift; sourceTree = "<group>"; };
 		8987F68B1E860ADE008E54AD /* CallTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallTableViewController.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 		8946F8651DF8452E00F3D849 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				89847E241E9FD68D00B02D01 /* ic_home_banner.jpg */,
 				898916D51E7D574C00BE6848 /* c_boy.jpg */,
 			);
 			name = images;
@@ -612,7 +615,7 @@
 				TargetAttributes = {
 					8915E6521DF26EF700B083B4 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = L73S98CZTF;
+						DevelopmentTeam = YQ94G6GXWQ;
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -660,6 +663,7 @@
 			files = (
 				898916D61E7D574C00BE6848 /* c_boy.jpg in Resources */,
 				8915E6611DF26EF800B083B4 /* LaunchScreen.storyboard in Resources */,
+				89847E251E9FD68D00B02D01 /* ic_home_banner.jpg in Resources */,
 				8915E65E1DF26EF800B083B4 /* Assets.xcassets in Resources */,
 				894C7A531E043913001B55E9 /* UpLoadFileView.xib in Resources */,
 				89239DFC1DFEEF2A009F902B /* Main.storyboard in Resources */,
@@ -964,7 +968,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = L73S98CZTF;
+				DEVELOPMENT_TEAM = YQ94G6GXWQ;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -995,7 +999,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = L73S98CZTF;
+				DEVELOPMENT_TEAM = YQ94G6GXWQ;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

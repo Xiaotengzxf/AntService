@@ -97,6 +97,9 @@
 		898916E11E7E48F500BE6848 /* OrganizationTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898916E01E7E48F500BE6848 /* OrganizationTableHeaderView.swift */; };
 		898916E31E7E490E00BE6848 /* OrganizationTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 898916E21E7E490E00BE6848 /* OrganizationTableHeaderView.xib */; };
 		899553C81DF5A1CA00C7421C /* MineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899553C71DF5A1CA00C7421C /* MineTableViewController.swift */; };
+		89965D791EA26A3A006560BA /* CommitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89965D781EA26A3A006560BA /* CommitView.swift */; };
+		89965D7B1EA26A4B006560BA /* CommitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89965D7A1EA26A4B006560BA /* CommitView.xib */; };
+		89965D7D1EA397F1006560BA /* CommitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89965D7C1EA397F1006560BA /* CommitViewController.swift */; };
 		89EA35961DF903F600247EBB /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA35951DF903F600247EBB /* Constant.swift */; };
 		89EA35981DF911CC00247EBB /* InfoLookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA35971DF911CC00247EBB /* InfoLookTableViewCell.swift */; };
 		89EA359A1DF93D2000247EBB /* CollectionViewHorizontalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EA35991DF93D2000247EBB /* CollectionViewHorizontalLayout.swift */; };
@@ -226,6 +229,9 @@
 		898916E01E7E48F500BE6848 /* OrganizationTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrganizationTableHeaderView.swift; sourceTree = "<group>"; };
 		898916E21E7E490E00BE6848 /* OrganizationTableHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrganizationTableHeaderView.xib; sourceTree = "<group>"; };
 		899553C71DF5A1CA00C7421C /* MineTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineTableViewController.swift; sourceTree = "<group>"; };
+		89965D781EA26A3A006560BA /* CommitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitView.swift; sourceTree = "<group>"; };
+		89965D7A1EA26A4B006560BA /* CommitView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitView.xib; sourceTree = "<group>"; };
+		89965D7C1EA397F1006560BA /* CommitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitViewController.swift; sourceTree = "<group>"; };
 		89EA35951DF903F600247EBB /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		89EA35971DF911CC00247EBB /* InfoLookTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoLookTableViewCell.swift; sourceTree = "<group>"; };
 		89EA35991DF93D2000247EBB /* CollectionViewHorizontalLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewHorizontalLayout.swift; sourceTree = "<group>"; };
@@ -370,6 +376,7 @@
 				8965CB481E815FFC007FA086 /* DialogViewController.swift */,
 				891B77481E82C94800CDD012 /* DialogNewViewController.swift */,
 				8978CAE21E921AB400BBC926 /* DialogDepTableViewController.swift */,
+				89965D7C1EA397F1006560BA /* CommitViewController.swift */,
 			);
 			name = Dialog;
 			sourceTree = "<group>";
@@ -518,6 +525,8 @@
 				895385B91E0E845D009ECD2E /* CommonOtherTableViewCell.swift */,
 				896913281E8C073A00251D8F /* CallTableViewCell.swift */,
 				8978CAEA1E93D40800BBC926 /* WaitWorkTableViewCell.swift */,
+				89965D781EA26A3A006560BA /* CommitView.swift */,
+				89965D7A1EA26A4B006560BA /* CommitView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -664,6 +673,7 @@
 				898916D61E7D574C00BE6848 /* c_boy.jpg in Resources */,
 				8915E6611DF26EF800B083B4 /* LaunchScreen.storyboard in Resources */,
 				89847E251E9FD68D00B02D01 /* ic_home_banner.jpg in Resources */,
+				89965D7B1EA26A4B006560BA /* CommitView.xib in Resources */,
 				8915E65E1DF26EF800B083B4 /* Assets.xcassets in Resources */,
 				894C7A531E043913001B55E9 /* UpLoadFileView.xib in Resources */,
 				89239DFC1DFEEF2A009F902B /* Main.storyboard in Resources */,
@@ -804,9 +814,11 @@
 				89162AFB1E0ABCAB00181BC5 /* SearchViewController.swift in Sources */,
 				8921C2271E096F3F007F1760 /* DateManager.swift in Sources */,
 				8987F6891E858A84008E54AD /* QuoteDetailTableViewController.swift in Sources */,
+				89965D7D1EA397F1006560BA /* CommitViewController.swift in Sources */,
 				8921C2291E09712A007F1760 /* VerticalViewController.swift in Sources */,
 				8987F6871E8585B0008E54AD /* QuoteTableViewController.swift in Sources */,
 				899553C81DF5A1CA00C7421C /* MineTableViewController.swift in Sources */,
+				89965D791EA26A3A006560BA /* CommitView.swift in Sources */,
 				89399B291E8026B30059BFC7 /* ContractTableViewController.swift in Sources */,
 				891B77491E82C94800CDD012 /* DialogNewViewController.swift in Sources */,
 				894721AF1DFAFC44002E0A60 /* ModifyPwdViewController.swift in Sources */,

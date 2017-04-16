@@ -10,7 +10,7 @@ import UIKit
 import Toaster
 import SwiftyJSON
 
-class DialogNewViewController: UIViewController {
+class DialogNewViewController: UIViewController , CommitViewControllerDelegate {
 
     @IBOutlet weak var ptvContent: PlaceholderTextView!
     @IBOutlet weak var idtfStart: IQDropDownTextField!
@@ -22,10 +22,15 @@ class DialogNewViewController: UIViewController {
     @IBOutlet weak var lcTimeWidth: NSLayoutConstraint!
     @IBOutlet weak var btnAll: UIButton!
     @IBOutlet weak var btnEnd: UIButton!
+    @IBOutlet weak var vCommit: UIView!
+    @IBOutlet weak var lcCommit: NSLayoutConstraint!
+    @IBOutlet weak var btnAdd: UIButton!
+    @IBOutlet weak var lcAdd: NSLayoutConstraint!
     var json : JSON?
     var bModify = false
     var personId = ""
     var date : Date?
+    var arrCommit : [JSON] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +61,7 @@ class DialogNewViewController: UIViewController {
         ptvContent.text = json?["content"].string
         if let start = json?["start"].string {
             bModify = true
+            title = "编辑工作日志"
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "删除", style: .plain, target: self, action: #selector(DialogNewViewController.deleteLog))
             let date = Date(timeIntervalSince1970: Double(start)!)
             idtfStart.date = date
@@ -63,6 +69,11 @@ class DialogNewViewController: UIViewController {
                 idtfStartTime.selectedItem = "08:00"
             }else{
                 idtfStartTime.date = date
+            }
+            if let commit = json?["commTalg"].string {
+                if Int(commit)! > 0 {
+                    loadData()
+                }
             }
         }else{
             idtfStart.date = date
@@ -77,11 +88,95 @@ class DialogNewViewController: UIViewController {
         
         btnAll.isSelected = json?["allDay"].string ?? "1" == "1"
         lcTimeWidth.constant = btnAll.isSelected ? SCREENWIDTH - 32 : (SCREENWIDTH - 48) / 2
+        
+        if personId.characters.count > 0 {
+            let userinfo = UserDefaults.standard.object(forKey: "mine") as? [String : Any]
+            let pId = userinfo?["id"] as? String ?? ""
+            if personId == pId {
+                
+            }else{
+                btnAdd.isHidden = true
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "点评", style: .plain, target: self, action: #selector(DialogNewViewController.addCommitTo))
+                title = "查看工作日志"
+                lcAdd.constant = 0
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func addCommitTo() {
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "commitvc") as? CommitViewController {
+            controller.c_id = json!["id"].stringValue
+            controller.modalTransitionStyle = .crossDissolve
+            controller.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            controller.modalPresentationStyle = .overFullScreen
+            controller.delegate = self
+            self.present(controller, animated: true, completion: { 
+                
+            })
+        }
+    }
+    
+    func addCommit() {
+        var vTem : CommitView?
+        for (index , json) in arrCommit.enumerated() {
+            if let vComm = Bundle.main.loadNibNamed("CommitView", owner: nil, options: nil)?.first as? CommitView {
+                vComm.translatesAutoresizingMaskIntoConstraints = false
+                vCommit.addSubview(vComm)
+                vComm.ivBG.image = UIImage(named: "bg_diggle_white")?.resizableImage(withCapInsets: UIEdgeInsetsMake(40, 30, 22, 20))
+                vComm.lblContent.text = json["comment"].string
+                vComm.lblTime.text = "\(json["nickname"].stringValue) \(json["comm_time"].stringValue)"
+                if index == 0 {
+                    vComm.ivBottom.isHidden = true
+                }else if index == arrCommit.count - 1 {
+                    vComm.ivTop.isHidden = true
+                }
+                if arrCommit.count == 1 {
+                    vComm.ivTop.isHidden = true
+                }
+                
+                vCommit.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[vComm]|", options: .directionLeadingToTrailing, metrics: nil, views: ["vComm" : vComm]))
+                vCommit.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:\(index == 0 ? "|" : "[vTem]-0-")[vComm]\(index == arrCommit.count - 1 ? "-(10)-|": "")", options: .directionLeadingToTrailing, metrics: nil, views: index == 0 ? ["vComm" : vComm] : ["vComm" : vComm , "vTem" : vTem!]))
+                vTem = vComm
+            }
+        }
+        if lcCommit != nil {
+            vCommit.removeConstraint(lcCommit)
+            lcCommit = nil
+        }
+    }
+    
+    func loadData() {
+        
+        let hud = self.showHUD(text: "努力加载中...")
+        
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appCommentList, params: ["c_id" : json!["id"].stringValue]){
+            [weak self] (json , error) in
+            hud.hide(animated: true)
+            if let object = json {
+                if let result = object["result"].int , result == 1000 {
+                    self?.arrCommit.removeAll()
+                    if let array = object["data"].array {
+                        self?.arrCommit += array
+                        if array.count > 0 {
+                            self?.vCommit.removeAllSubviews()
+                            self?.addCommit()
+                        }
+                    }
+                }else{
+                    if let message = object["msg"].string , message.characters.count > 0 {
+                        Toast(text: message).show()
+                    }
+                }
+            }else{
+                Toast(text: "网络异常，请稍后重试").show()
+                
+            }
+        }
     }
     
     func rightView(name : String, size : CGSize) -> UIView {
@@ -122,6 +217,7 @@ class DialogNewViewController: UIViewController {
         vEnd.isHidden = !btnEnd.isSelected
         lcEndHeight.constant = btnEnd.isSelected ? 90 : 0
     }
+    
     @IBAction func save(_ sender: Any) {
         resign()
         guard let content = ptvContent.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
@@ -218,5 +314,10 @@ class DialogNewViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func saveCommitSuccess() {
+        loadData()
+    }
+    
 
 }

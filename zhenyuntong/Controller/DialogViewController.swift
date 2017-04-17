@@ -226,7 +226,10 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
         }else{
             if checkoutSameDay(dayView: dayView) {
                 imageView.image = UIImage(named: "ic_bg_course_not_optional")
+            }else if checkoutCommTalg(dayView: dayView){
+                imageView.image = UIImage(named: "ic_record_smiling_face")
             }else{
+                //ic_record_smiling_face
             }
         }
         return imageView
@@ -237,6 +240,8 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
             return true
         }else{
             if checkoutSameDay(dayView: dayView) {
+                return true
+            }else if checkoutCommTalg(dayView: dayView){
                 return true
             }else{
                 return false
@@ -256,7 +261,37 @@ class DialogViewController: UIViewController , CVCalendarViewDelegate , CVCalend
                     print("\(component.year!)-\(component.month!)-\(component.day!) \(dayView.date.year)-\(dayView.date.month)-\(dayView.date.day)")
                     if component.year! == dayView.date.year && component.month! == dayView.date.month && component.day! == dayView.date.day {
                         if dayView.date.month == currentMonth {
-                            return true
+                            if let commTalg = json["commTalg"].string {
+                                let comm = Int(commTalg)
+                                if comm == 0 {
+                                    return true
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func checkoutCommTalg(dayView : DayView) -> Bool {
+        if data.count > 0 {
+            for json in data {
+                if let start = json["start"].string {
+                    let date = Date(timeIntervalSince1970: Double(start)!)
+                    let calendar = NSCalendar.current
+                    let component = calendar.dateComponents([.year , .month , .day], from: date)
+                    print("\(component.year!)-\(component.month!)-\(component.day!) \(dayView.date.year)-\(dayView.date.month)-\(dayView.date.day)")
+                    if component.year! == dayView.date.year && component.month! == dayView.date.month && component.day! == dayView.date.day {
+                        if dayView.date.month == currentMonth {
+                            if let commTalg = json["commTalg"].string {
+                                let comm = Int(commTalg) ?? 0
+                                if comm > 0 {
+                                    return true
+                                }
+                            }
                         }
                         
                     }

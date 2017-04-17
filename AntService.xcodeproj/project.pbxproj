@@ -615,7 +615,7 @@
 				TargetAttributes = {
 					8915E6521DF26EF700B083B4 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = YQ94G6GXWQ;
+						DevelopmentTeam = L73S98CZTF;
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -968,7 +968,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = YQ94G6GXWQ;
+				DEVELOPMENT_TEAM = L73S98CZTF;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -999,7 +999,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = YQ94G6GXWQ;
+				DEVELOPMENT_TEAM = L73S98CZTF;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

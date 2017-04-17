@@ -63,6 +63,7 @@ class NetworkManager {
     let appDepWorkLog = "appDepWorkLog.html"
     let appWOAppoint = "appWOAppoint.html"
     let appWOClose = "appWOClose.html"
+    let appCallBack = "appCallBack.html"
     
     func macAddress() -> String {
         if let mac = UserDefaults.standard.string(forKey: "domain") {

@@ -207,15 +207,42 @@ class CustomerDetailTableViewController: UITableViewController {
     }
     
     func openUrlForCall(mobile : String) {
-        let alert = UIAlertController(title: nil, message: mobile, preferredStyle: .alert)
+        let alert = UIAlertController(title: "系统提示", message: "确定回拨该客户吗？", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { (action) in
             
         }))
-        alert.addAction(UIAlertAction(title: "确定", style: .default, handler: { (action) in
-            UIApplication.shared.openURL(URL(string: "tel://\(mobile)")!)
+        alert.addAction(UIAlertAction(title: "确定", style: .default, handler: {[weak self] (action) in
+            //UIApplication.shared.openURL(URL(string: "tel://\(mobile)")!)
+            self?.callback(mobile: mobile)
         }))
         self.present(alert, animated: true) { 
             
         }
     }
+    
+    func callback(mobile : String)  {
+        let hud = showHUD(text: "回拨中...")
+        if let userinfo = UserDefaults.standard.object(forKey: "mine") as? [String : Any] {
+            let exten = userinfo["exten"] as? String ?? ""
+            NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appCallBack, params: ["exten": exten , "toPhone": mobile]){
+                (json , error) in
+                hud.hide(animated: true)
+                if let object = json {
+                    if let result = object["result"].int {
+                        if result == 1000 {
+                            Toast(text: "回拨成功，请耐心等待！").show()
+                        }else{
+                            if let msg = object["msg"].string {
+                                Toast(text: msg).show()
+                            }
+                        }
+                    }
+                }else{
+                    Toast(text: "网络异常，请检查网络").show()
+                }
+            }
+        }
+    }
+    
+    
 }

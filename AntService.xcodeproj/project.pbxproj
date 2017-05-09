@@ -624,7 +624,7 @@
 				TargetAttributes = {
 					8915E6521DF26EF700B083B4 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = L73S98CZTF;
+						DevelopmentTeam = ATC7LUECLP;
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -980,7 +980,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = L73S98CZTF;
+				DEVELOPMENT_TEAM = ATC7LUECLP;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -996,7 +996,7 @@
 					"$(PROJECT_DIR)/zhenyuntong/Kit/General/Audio/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/zhenyuntong/Kit/General/Audio/VoiceConvert/opencore-amrwb",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangxiaofei.AntService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lasting.AntService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "zhenyuntong/Kit/zhenyuntong-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1011,7 +1011,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = L73S98CZTF;
+				DEVELOPMENT_TEAM = ATC7LUECLP;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1027,7 +1027,7 @@
 					"$(PROJECT_DIR)/zhenyuntong/Kit/General/Audio/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/zhenyuntong/Kit/General/Audio/VoiceConvert/opencore-amrwb",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhangxiaofei.AntService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lasting.AntService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "zhenyuntong/Kit/zhenyuntong-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

@@ -13,7 +13,7 @@ import SwiftyJSON
 class NetworkManager {
     
     static let installshared = NetworkManager()
-    let urlPrefix = "http://api.mayikf.com/"
+    let urlPrefix = "https://api.mayikf.com/"
     let null = ""
     let login = "appLogin.html" // 登录接口
     let appGetUserModel = "appGetUserModel.html"
@@ -63,12 +63,9 @@ class NetworkManager {
     let appDepWorkLog = "appDepWorkLog.html"
     let appWOAppoint = "appWOAppoint.html"
     let appWOClose = "appWOClose.html"
-<<<<<<< HEAD
     let appCallBack = "appCallBack.html"
-=======
     let appCommentList = "appCommentList.html"
     let appSaveComm = "appSaveComm.html"
->>>>>>> 11305a4bfa7ff02a98ac7440e9c71051eb81c154
     
     func macAddress() -> String {
         if let mac = UserDefaults.standard.string(forKey: "domain") {

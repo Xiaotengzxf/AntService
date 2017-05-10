@@ -63,7 +63,7 @@ class ModifyNickViewController: UIViewController {
                             if let info = UserDefaults.standard.object(forKey: "mine") {
                                 var json = JSON(info)
                                 if self!.row == 2 {
-                                    json["nickName"].string = nickname
+                                    json["nickname"].string = nickname
                                 }else if self!.row == 3 {
                                     json["mobile"].string = nickname
                                 }else if self!.row == 7 {

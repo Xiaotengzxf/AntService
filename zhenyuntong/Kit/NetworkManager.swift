@@ -13,7 +13,7 @@ import SwiftyJSON
 class NetworkManager {
     
     static let installshared = NetworkManager()
-    let urlPrefix = "https://api.mayikf.com/"
+    let urlPrefix = "http://api.mayikf.com/"
     let null = ""
     let login = "appLogin.html" // 登录接口
     let appGetUserModel = "appGetUserModel.html"

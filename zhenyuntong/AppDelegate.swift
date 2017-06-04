@@ -72,6 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate  {
         //startSocket() // 启动socket
         //createDB()
         
+        Bugly.start(withAppId: "a105156434")
+        
         return true
     }
 

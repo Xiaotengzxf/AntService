@@ -28,6 +28,12 @@ class OrderDetailTableViewController: UITableViewController {
         })
         tableView.mj_header.beginRefreshing()
         NotificationCenter.default.addObserver(self, selector: #selector(OrderDetailTableViewController.handleNotification(notification:)), name: Notification.Name(NotificationName.OrderDetail.rawValue), object: nil)
+        
+        if self.detail?["progress"].intValue == 2 {
+            self.navigationItem.rightBarButtonItem = nil
+        }else{
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "处理", style: .plain, target: self, action: #selector(OrderDetailTableViewController.handle(_:)))
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,11 +53,7 @@ class OrderDetailTableViewController: UITableViewController {
                 if let result = object["result"].int , result == 1000 {
                     self?.data = object["data"]
                     self?.tableView.reloadData()
-                    if self?.data?["accounts"].array?.count ?? 0 > 1 {
-                        self?.navigationItem.rightBarButtonItem = nil
-                    }else{
-                        self?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "处理", style: .plain, target: self, action: #selector(OrderDetailTableViewController.handle(_:)))
-                    }
+                    
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {
                         Toast(text: message).show()

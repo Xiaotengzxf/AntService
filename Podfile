@@ -30,6 +30,8 @@ target 'AntService' do
     #pod 'CocoaAsyncSocket'
     
     #pod 'KeychainAccess'
+    
+    pod 'Bugly'
 
 end
 

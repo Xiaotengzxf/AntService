@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (4.4.0)
   - ALCameraViewController (1.2.7)
+  - Bugly (2.4.7)
   - CVCalendar (1.4.1)
   - DZNEmptyDataSet (1.8.1)
   - FMDB (2.6.2):
@@ -23,6 +24,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - ALCameraViewController
+  - Bugly
   - CVCalendar
   - DZNEmptyDataSet
   - FMDB
@@ -49,6 +51,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   ALCameraViewController: 4a513b8d5ecfdb3f34c50b1d469c373aae1ec7b4
+  Bugly: 2c256069145f550171907c5cb1c0f84ad291f6c1
   CVCalendar: 61912eb5dc39c3bcfe22a731147a559a696fbc15
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
@@ -63,6 +66,6 @@ SPEC CHECKSUMS:
   TabPageViewController: 66aca4291518e66f6ef6800bfe3a98217f58a434
   Toaster: 77c0b03d78e680bbbab0071c9c7ee392b0034010
 
-PODFILE CHECKSUM: 2d520bac8ea34663beb86f71b6133f36481352fb
+PODFILE CHECKSUM: 14a3f6a369695243d397508273d0a908b426e059
 
 COCOAPODS: 1.2.1.beta.1

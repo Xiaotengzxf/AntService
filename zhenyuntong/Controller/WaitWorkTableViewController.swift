@@ -159,7 +159,18 @@ class WaitWorkTableViewController: UITableViewController ,DZNEmptyDataSetDelegat
             let wf_ok = data[indexPath.row]["wf_ok"].stringValue
             if wf_ok == "0" {
                 label.text = "进行中"
-                label.textColor = UIColor(red: 30/255.0, green: 160/255.0, blue: 20/255.0, alpha: 1)
+                
+                if let dict = UserDefaults.standard.object(forKey: "mine") as? [String : Any] {
+                    let uid = dict["id"] as? String ?? "0"
+                    let wf_to_id = "\(data[indexPath.row]["wf_to_id"].intValue)"
+                    if uid == wf_to_id {
+                        label.textColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1)
+                    }else{
+                        label.textColor = UIColor(red: 30/255.0, green: 160/255.0, blue: 20/255.0, alpha: 1)
+                    }
+                }else{
+                    label.textColor = UIColor(red: 30/255.0, green: 160/255.0, blue: 20/255.0, alpha: 1)
+                }
             }else if wf_ok == "1" {
                 label.text = "已完成"
                 label.textColor = UIColor.blue

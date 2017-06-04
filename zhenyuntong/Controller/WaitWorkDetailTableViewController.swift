@@ -28,6 +28,20 @@ class WaitWorkDetailTableViewController: UITableViewController , WaitWorkTableVi
         })
         
         NotificationCenter.default.addObserver(self, selector: #selector(WaitWorkDetailTableViewController.handleNotification(notification:)), name: Notification.Name("waitworkdetail"), object: nil)
+        
+        if let wf_ok = detail?["wf_ok"].stringValue, wf_ok == "0" {
+            if let dict = UserDefaults.standard.object(forKey: "mine") as? [String : Any] {
+                let uid = dict["id"] as? String ?? "0"
+                let wf_to_id = "\(detail!["wf_to_id"].intValue)"
+                if uid == wf_to_id {
+                    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "操作", style: .plain, target: self, action: #selector(WaitWorkDetailTableViewController.operation(_:)))
+                }else{
+                    navigationItem.rightBarButtonItem = nil
+                }
+            }else{
+                navigationItem.rightBarButtonItem = nil
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -162,7 +176,7 @@ class WaitWorkDetailTableViewController: UITableViewController , WaitWorkTableVi
         }
     }
     
-    @IBAction func operation(_ sender: Any) {
+    func operation(_ sender: Any) {
         
         let sheet = UIAlertController(title: "操作", message: nil, preferredStyle: .actionSheet)
         sheet.addAction(UIAlertAction(title: "处理", style: .default, handler: {[weak self] (action) in

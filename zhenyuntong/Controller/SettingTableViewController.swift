@@ -30,8 +30,6 @@ class SettingTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             
-        }else if indexPath.row == 1 {
-            
         }else{
             let alert = UIAlertController(title: "提示", message: "需要清空缓存吗？", preferredStyle: .alert)
              alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { (action) in

@@ -72,7 +72,7 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
                             self?.tableView.mj_footer.endRefreshingWithNoMoreData()
                         }
                     }
-                    if let arr = object["data"].array {
+                    if let arr = object["data", "commoditys"].array {
                         self!.data += arr
                     }
                     if self?.data.count == 0 {

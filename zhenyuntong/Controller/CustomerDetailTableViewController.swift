@@ -13,7 +13,7 @@ import Toaster
 class CustomerDetailTableViewController: UITableViewController {
 
     // connLabel
-    let titles = ["客户名称：" , "客户分类：" , "手机号码：" , "电话号码：" , "添  加  人：" , "添加时间：" ,
+    let titles = ["客户名称：", "公司名称：" , "客户分类：" , "手机号码：" , "电话号码：" , "添  加  人：" , "添加时间：" ,
                   "地        址：" , "备        注："]
     var data : JSON!
     @IBOutlet weak var footerView: UIView!
@@ -25,6 +25,7 @@ class CustomerDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: 64)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,24 +131,27 @@ class CustomerDetailTableViewController: UITableViewController {
                 label.text = setDefaultValue(value: data["customer"].string)
                 label.textColor = UIColor.darkGray
             case 1:
-                label.text = setDefaultValue(value: data["connType"].string)
+                label.text = setDefaultValue(value: data["connName"].string)
                 label.textColor = UIColor.darkGray
             case 2:
+                label.text = setDefaultValue(value: data["connType"].string)
+                label.textColor = UIColor.darkGray
+            case 3:
                 label.text = setDefaultValue(value: data["mobile"].string)
                 label.textColor = UIColor(red: 30/255.0, green: 160/255.0, blue: 20/255.0, alpha: 1)
-            case 3:
+            case 4:
                 label.text = setDefaultValue(value: data["phone"].string)
                 label.textColor = UIColor(red: 30/255.0, green: 160/255.0, blue: 20/255.0, alpha: 1)
-            case 4:
+            case 5:
                 label.text = setDefaultValue(value: data["adduser"].string)
                 label.textColor = UIColor.darkGray
-            case 5:
+            case 6:
                 label.text = setDefaultValue(value: data["add_time"].string)
                 label.textColor = UIColor.darkGray
-            case 6:
+            case 7:
                 label.text = setDefaultValue(value: data["address"].string)
                 label.textColor = UIColor.darkGray
-            case 7:
+            case 8:
                 label.text = setDefaultValue(value: data["remark"].string)
                 label.textColor = UIColor.darkGray
             default:
@@ -244,5 +248,12 @@ class CustomerDetailTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func startCommercial(_ sender: Any) {
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "commercialadd") as? CommercialAddViewController {
+            controller.title = "发起商机"
+            controller.cust_id = data?["id"].string ?? ""
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
     
 }

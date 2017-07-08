@@ -1,29 +1,35 @@
 //
-//  ProductManageTableViewController.swift
+//  ZXFCommercialListTableViewController.swift
 //  AntService
 //
-//  Created by 张晓飞 on 2017/3/20.
+//  Created by 张晓飞 on 2017/6/25.
 //  Copyright © 2017年 zhenyuntong. All rights reserved.
 //
 
 import UIKit
-import MJRefresh
-import Toaster
 import SwiftyJSON
 import DZNEmptyDataSet
+import MJRefresh
+import Toaster
+import TabPageViewController
 
-class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDelegate , DZNEmptyDataSetSource {
+class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
-    var page = 0
+    var search = "" // 搜索关键词
+    var page = 0  // 当前页码
+    var state = 0 // 状态
     var data : [JSON] = []
+    //var proCommerialList : CommercialListProtocol?
     var nShowEmpty = 2 // 1 无数据 2 加载中 3 无网络
-    var row = 0
-    var search = ""
     var bSearch = false
-    
+    var type = ""
+    var includeMy = "n"
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.rowHeight = UITableViewAutomaticDimension
+        
         tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: {
             [weak self] in
             self?.page = 0
@@ -35,31 +41,36 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
             self?.loadData()
         })
         tableView.mj_footer.isHidden = true
-        NotificationCenter.default.addObserver(self, selector: #selector(ProductManageTableViewController.handleNotification(notification:)), name: Notification.Name("productmanage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ZXFCommercialListTableViewController.handleNotification(notification:)), name: Notification.Name("commerciallist"), object: nil)
         
         if bSearch {
             self.navigationItem.rightBarButtonItem = nil
+            self.title = "搜索结果"
+        }else{
+            tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0)
         }
-        loadData()
+        
+        self.loadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+    // MARK: - mothd
     func loadData() {
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appCommondity, params: ["search" : search , "page" : page]){
-            [weak self] (json , error) in
+        var params : [String : Any] = ["type" : type, "state" : state, "page" : page, "searchdata" : search]
+        if bSearch {
+            params["includeMy"] = includeMy
+        }
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoList, params: params) {[weak self] (json, error) in
             self?.tableView.mj_header.endRefreshing()
             self?.tableView.mj_footer.endRefreshing()
             if let object = json {
@@ -72,11 +83,11 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
                             self?.tableView.mj_footer.endRefreshingWithNoMoreData()
                         }
                     }
-                    if let arr = object["data", "commoditys"].array {
+                    if let arr = object["data"].array {
                         self!.data += arr
                     }
                     if self?.data.count == 0 {
-                        self?.nShowEmpty = 1
+                        self?.nShowEmpty = 3
                         self?.tableView.mj_footer.isHidden = true
                     }else{
                         self?.tableView.mj_footer.isHidden = false
@@ -89,7 +100,7 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
                 }
             }else{
                 if self?.page == 0 && self?.data.count ?? 0 == 0{
-                    self?.nShowEmpty = 3
+                    self?.nShowEmpty = 1
                     self?.tableView.reloadData()
                 }else{
                     Toast(text: "网络异常，请稍后重试").show()
@@ -99,28 +110,15 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
         }
     }
     
-    @IBAction func search(_ sender: Any) {
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "search") as? SearchViewController {
-            controller.modalTransitionStyle = .crossDissolve
-            controller.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            controller.modalPresentationStyle = .overFullScreen
-            controller.searchName = "productmanage"
-            self.present(controller, animated: true, completion: {
-                
-            })
-        }
-        
-    }
-    
     func handleNotification(notification : Notification) {
         if let tag = notification.object as? Int {
             if tag == 1 {
                 if let userInfo = notification.userInfo as? [String : Any] {
                     if let message = userInfo["message"] as? String {
-                        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "productmanage") as? ProductManageTableViewController {
-                            controller.title = "搜索结果"
+                        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController {
                             controller.search = message
                             controller.bSearch = true
+                            controller.state = state
                             controller.hidesBottomBarWhenPushed = true
                             self.navigationController?.pushViewController(controller, animated: true)
                         }
@@ -129,50 +127,89 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
             }
         }
     }
-    
+
     // MARK: - Table view data source
-    
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return data.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        if let label = cell.viewWithTag(2) as? UILabel {
-            label.text = data[indexPath.row]["name"].string ?? ""
+
+        if let lblName = cell.contentView.viewWithTag(2) as? UILabel {
+            lblName.text = data[indexPath.row]["name"].string
         }
-        if let label = cell.viewWithTag(3) as? UILabel {
-            label.text = "编号：\(data[indexPath.row]["number"].stringValue)"
+        if let lblCustomerName = cell.contentView.viewWithTag(3) as? UILabel {
+            lblCustomerName.text = "客户名称：\(data[indexPath.row]["custname"].string ?? "") 商机类型：\(data[indexPath.row]["flowtemp"].string ?? "")"
         }
-        if let label = cell.viewWithTag(4) as? UILabel {
-            label.text = "类型：\(data[indexPath.row]["typename"].stringValue) 型号：\(data[indexPath.row]["model"].stringValue) 价格：\(data[indexPath.row]["price1"].stringValue)/\(data[indexPath.row]["company"].stringValue)"
+        if let lblAdder = cell.contentView.viewWithTag(4) as? UILabel {
+            lblAdder.text = "添加人：\(data[indexPath.row]["adduser_nickname"].string ?? "") 跟进人：\(data[indexPath.row]["curuser_nickname"].string ?? "")"
         }
-        if let label = cell.viewWithTag(5) as? UILabel {
-            label.text = "\(data[indexPath.row]["describe"].stringValue)"
+        if let lblAddTime = cell.contentView.viewWithTag(5) as? UILabel {
+            lblAddTime.text = "添加时间：\(data[indexPath.row]["addtime"].string ?? "")"
         }
+
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let strId = data[indexPath.row]["id"].stringValue
+        let hud = showHUD(text: "加载中...")
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoDetail, params: ["id" : strId]){
+            [weak self] (json , error) in
+            hud.hide(animated: true)
+            if let object = json {
+                if let result = object["result"].int , result == 1000 {
+                    let page = TabPageViewController.create()
+                    page.title = "商机详情"
+                    guard let detail = self?.storyboard?.instantiateViewController(withIdentifier: "commercialdetail") as? CommercialDetailTableViewController else {
+                        return
+                    }
+                    detail.data = object["data"]
+                    guard let flow = self?.storyboard?.instantiateViewController(withIdentifier: "commercialflow") as? CommercialFlowTableViewController else {
+                        return
+                    }
+                    flow.data = object["data"]
+                    var option = TabPageOption()
+                    option.tabBackgroundColor = UIColor.white
+                    option.isTranslucent = false
+                    option.tabHeight = 44
+                    option.tabWidth = SCREENWIDTH / 2
+                    page.option = option
+                    page.tabItems = [(detail, "商机详情"), (flow, "商机流程")]
+                    page.hidesBottomBarWhenPushed = true
+                    self?.navigationController?.pushViewController(page, animated: true)
+                }else{
+                    if let message = object["msg"].string , message.characters.count > 0 {
+                        Toast(text: message).show()
+                    }
+                }
+            }else{
+                Toast(text: "网络异常，请稍后重试").show()
+                
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        row = indexPath.row
-        self.performSegue(withIdentifier: "productdetail", sender: self)
-    }
-    
+
+    /*
     // MARK: - Navigation
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let controller = segue.destination as? ProductDetailTableViewController {
-            controller.data = data[row]
-        }
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
+    */
     
     // MARK: - 空数据
     func backgroundColor(forEmptyDataSet scrollView: UIScrollView!) -> UIColor! {
@@ -232,5 +269,5 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
         animation.fillMode = kCAFillModeForwards
         return animation
     }
-    
+
 }

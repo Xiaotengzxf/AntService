@@ -62,6 +62,7 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
             self.navigationItem.titleView = vTitle
         }
         
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

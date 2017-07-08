@@ -16,17 +16,18 @@ private let reuseIdentifier = "Cell"
 class IndexCollectionViewController: UICollectionViewController , UICollectionViewDelegateFlowLayout  {
     let titles = ["待处理工单" , "历史工单" , "待办事项" ,
                   "组织机构" , "通话记录" , "客户管理" ,
-                  "报价单" , "工作日志" , "合同管理" ,
+                  "报价单" , "工作日志" ,"商机管理", "合同管理" ,
                   "商品管理" , "个人中心" , "系统设置"]
     let imageNames = ["dclgd" , "yclgd" , "dbsx" ,
                       "zzjg" , "thjl" , "khgl" ,
-                      "bjd" , "kq" , "ht" ,
+                      "bjd" , "kq" , "ht" ,"ht",
                       "spgl" , "grzx" , "xtsz"]
     var bViewShow = false
     var workOrderCount = 0
     var workFlowCount = 0
     @IBOutlet weak var modelItem: UIBarButtonItem!
     var page : TabPageViewController!
+    var currentRow = -1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +143,7 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return titles.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -203,6 +204,7 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        currentRow = indexPath.row
         if indexPath.row == 0 {
             if let controller = self.storyboard?.instantiateViewController(withIdentifier: "order") as? OrderTableViewController {
                 controller.hidesBottomBarWhenPushed = true
@@ -248,17 +250,47 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
         }else if indexPath.row == 7 {
             self.performSegue(withIdentifier: "dialog", sender: self)
         }else if indexPath.row == 8 {
-            self.performSegue(withIdentifier: "contract", sender: self)
+            // commerciallist
+            page = TabPageViewController.create()
+            page.title = "商机列表"
+            guard let confirming = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController else {
+                return
+            }
+            confirming.state = 2
+            guard let following = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController else {
+                return
+            }
+            following.state = 1
+            guard let finished = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController else {
+                return
+            }
+            finished.state = 3
+            guard let destoried = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController else {
+                return
+            }
+            destoried.state = 4
+            var option = TabPageOption()
+            option.tabBackgroundColor = UIColor.white
+            option.isTranslucent = false
+            option.tabHeight = 44
+            option.tabWidth = SCREENWIDTH / 4
+            page.option = option
+            page.tabItems = [(confirming, "确认中"), (following, "跟进中"), (finished, "已完成"), (destoried, "已销毁") ]
+            page.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(page, animated: true)
+            page.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(IndexCollectionViewController.handleBarButtonEvent))
         }else if indexPath.row == 9 {
-            self.performSegue(withIdentifier: "product", sender: self)
+            self.performSegue(withIdentifier: "contract", sender: self)
         }else if indexPath.row == 10 {
+            self.performSegue(withIdentifier: "product", sender: self)
+        }else if indexPath.row == 11 {
             guard let mine = self.storyboard?.instantiateViewController(withIdentifier: "mine") as? MineTableViewController else {
                 return
             }
             mine.hidesBottomBarWhenPushed = true
             mine.navigationItem.rightBarButtonItem = nil
             self.navigationController?.pushViewController(mine, animated: true)
-        }else if indexPath.row == 11 {
+        }else if indexPath.row == 12 {
             guard let setting = self.storyboard?.instantiateViewController(withIdentifier: "setting") as? SettingTableViewController else {
                 return
             }
@@ -268,14 +300,20 @@ class IndexCollectionViewController: UICollectionViewController , UICollectionVi
     }
     
     func handleBarButtonEvent() {
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "search") as? SearchViewController {
-            controller.modalTransitionStyle = .crossDissolve
-            controller.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            controller.modalPresentationStyle = .overFullScreen
-            controller.searchName = "userlist"
-            self.present(controller, animated: true, completion: {
-                
-            })
+        if currentRow == 8 {
+            if let controller = self.storyboard?.instantiateViewController(withIdentifier: "commercialsearch") as? CommercialSearchViewController {
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }else{
+            if let controller = self.storyboard?.instantiateViewController(withIdentifier: "search") as? SearchViewController {
+                controller.modalTransitionStyle = .crossDissolve
+                controller.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+                controller.modalPresentationStyle = .overFullScreen
+                controller.searchName = "userlist"
+                self.present(controller, animated: true, completion: {
+                    
+                })
+            }
         }
     }
 }

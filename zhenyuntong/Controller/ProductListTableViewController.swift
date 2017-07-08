@@ -1,8 +1,8 @@
 //
-//  ProductManageTableViewController.swift
+//  ProductListTableViewController.swift
 //  AntService
 //
-//  Created by 张晓飞 on 2017/3/20.
+//  Created by 张晓飞 on 2017/7/4.
 //  Copyright © 2017年 zhenyuntong. All rights reserved.
 //
 
@@ -12,14 +12,16 @@ import Toaster
 import SwiftyJSON
 import DZNEmptyDataSet
 
-class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDelegate , DZNEmptyDataSetSource {
+class ProductListTableViewController: UITableViewController ,DZNEmptyDataSetDelegate , DZNEmptyDataSetSource, ProductTableViewCellDelegate {
     
     var page = 0
     var data : [JSON] = []
     var nShowEmpty = 2 // 1 无数据 2 加载中 3 无网络
     var row = 0
     var search = ""
-    var bSearch = false
+    var rows : Set<Int> = []
+    var priceCH : JSON!
+    var delegate : ProductListTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +39,7 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
         tableView.mj_footer.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(ProductManageTableViewController.handleNotification(notification:)), name: Notification.Name("productmanage"), object: nil)
         
-        if bSearch {
-            self.navigationItem.rightBarButtonItem = nil
-        }
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "确定", style: .plain, target: self, action: #selector(ProductListTableViewController.submitSelectedProduct(sender:)))
         loadData()
     }
     
@@ -64,6 +64,7 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
             self?.tableView.mj_footer.endRefreshing()
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
+                    self!.priceCH = object["data", "priceCH"]
                     if self!.page == 0 {
                         self?.data.removeAll()
                     }
@@ -130,6 +131,17 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
         }
     }
     
+    func submitSelectedProduct(sender : Any) {
+        if rows.count > 0 {
+            var products : [JSON] = []
+            for row in rows {
+                products.append(data[row])
+            }
+            delegate?.callbackWithSelectedProducts(products: products, priceCH: priceCH!)
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -138,40 +150,38 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ProductTableViewCell
+        cell.tag = indexPath.row
+        cell.delegate = self
         
-        if let label = cell.viewWithTag(2) as? UILabel {
-            label.text = data[indexPath.row]["name"].string ?? ""
-        }
-        if let label = cell.viewWithTag(3) as? UILabel {
-            label.text = "编号：\(data[indexPath.row]["number"].stringValue)"
-        }
-        if let label = cell.viewWithTag(4) as? UILabel {
-            label.text = "类型：\(data[indexPath.row]["typename"].stringValue) 型号：\(data[indexPath.row]["model"].stringValue) 价格：\(data[indexPath.row]["price1"].stringValue)/\(data[indexPath.row]["company"].stringValue)"
-        }
-        if let label = cell.viewWithTag(5) as? UILabel {
-            label.text = "\(data[indexPath.row]["describe"].stringValue)"
-        }
+        cell.lblName.text = data[indexPath.row]["name"].stringValue
+        cell.lblNo.text = "编号：\(data[indexPath.row]["number"].stringValue)"
+        cell.lblType.text = "类型：\(data[indexPath.row]["typename"].stringValue) 型号：\(data[indexPath.row]["model"].stringValue) 价格：\(data[indexPath.row]["price1"].stringValue)/\(data[indexPath.row]["company"].stringValue)"
+        cell.lblRemark.text = "\(data[indexPath.row]["describe"].stringValue)"
+        
+        cell.btnSelect.isSelected = rows.contains(indexPath.row)
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 150
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         row = indexPath.row
-        self.performSegue(withIdentifier: "productdetail", sender: self)
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "productdetail") as? ProductDetailTableViewController {
+            controller.data = data[row]
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let controller = segue.destination as? ProductDetailTableViewController {
-            controller.data = data[row]
-        }
+        
     }
     
     // MARK: - 空数据
@@ -233,4 +243,17 @@ class ProductManageTableViewController: UITableViewController ,DZNEmptyDataSetDe
         return animation
     }
     
+    func selectProduct(withTag: Int) {
+        if rows.contains(withTag) {
+            rows.remove(withTag)
+        }else{
+            rows.insert(withTag)
+        }
+        tableView.reloadData()
+    }
+    
+}
+
+protocol ProductListTableViewControllerDelegate {
+    func callbackWithSelectedProducts(products : [JSON] , priceCH : JSON)
 }

@@ -134,11 +134,6 @@ extern NSInteger const IQOptionalTextFieldIndex;
 @property (nonatomic, assign) IBInspectable BOOL isOptionalDropDown;
 
 /**
- Use selectedItem property to get/set dropdown text.
- */
-@property(nullable, nonatomic,copy)   NSString               *text NS_DEPRECATED_IOS(3_0, 5_0, "Please use selectedItem property to get/set dropdown selected text instead");
-
-/**
  attributedText is unavailable in IQDropDownTextField.
  */
 @property(nullable, nonatomic,copy)   NSAttributedString     *attributedText NS_UNAVAILABLE;

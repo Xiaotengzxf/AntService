@@ -14,7 +14,7 @@ class CommercialDetailTableViewController: UITableViewController {
     
     var strId = 0
     var data : JSON!
-    var titles = ["商机编号：", "商机名称：", "商机类型：", "发    起    人：", "商机备注："]
+    var titles = ["商机编号：", "商机名称：", "商机类型：", "发  起  人：", "商机备注："]
     
     override func viewDidLoad() {
         super.viewDidLoad()

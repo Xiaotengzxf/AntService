@@ -24,6 +24,7 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     var bSearch = false
     var type = ""
     var includeMy = "n"
+    var row = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,6 +160,7 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        row = indexPath.row
         let strId = data[indexPath.row]["id"].stringValue
         let hud = showHUD(text: "加载中...")
         NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoDetail, params: ["id" : strId]){
@@ -184,6 +186,9 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                     page.option = option
                     page.tabItems = [(detail, "商机详情"), (flow, "商机流程")]
                     page.hidesBottomBarWhenPushed = true
+                    if self!.state == 1 || self!.state == 2 {
+                        page.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "操作", style: .plain, target: self, action: #selector(ZXFCommercialListTableViewController.handleDetailEvent(sender:)))
+                    }
                     self?.navigationController?.pushViewController(page, animated: true)
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {
@@ -268,6 +273,103 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
         animation.autoreverses = false
         animation.fillMode = kCAFillModeForwards
         return animation
+    }
+    
+    func handleDetailEvent(sender : Any) {
+        if state == 1 {
+            let sheet = UIAlertController(title: "操作", message: nil, preferredStyle: .actionSheet)
+            sheet.addAction(UIAlertAction(title: "处理", style: .default, handler: {[weak self] (action) in
+                self?.loadNext()
+            }))
+            sheet.addAction(UIAlertAction(title: "委托", style: .default, handler: {[weak self] (action) in
+                self?.loadEntrust()
+            }))
+            sheet.addAction(UIAlertAction(title: "销毁", style: .default, handler: {[weak self] (action) in
+                if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "waitworkclear") as? WaitWorkClearViewController {
+                    controller.modalTransitionStyle = .crossDissolve
+                    controller.modalPresentationStyle = .overFullScreen
+                    //controller.wfId = self!.wfId
+                    self?.present(controller, animated: true, completion: {
+                        
+                    })
+                }
+            }))
+            sheet.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { (action) in
+                
+            }))
+            self.present(sheet, animated: true) {
+                
+            }
+        }else {
+            let action = UIAlertController(title: "操作", message: nil, preferredStyle: .actionSheet)
+            action.addAction(UIAlertAction(title: "指派", style: .default, handler: {[weak self] (action) in
+                self?.performSegue(withIdentifier: "userlist", sender: self)
+            }))
+            action.addAction(UIAlertAction(title: "闭单", style: .default, handler: {[weak self] (action) in
+                //self?.closeOrder()
+            }))
+            self.present(action, animated: true) {
+                
+            }
+        }
+        
+    }
+    
+    func loadNext() {
+        let hud = showHUD(text: "加载中...")
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoList, params: nil){
+            [weak self] (json , error) in
+            hud.hide(animated: true)
+            if let object = json {
+                if let result = object["result"].int , result == 1000 {
+                    if let array = object["data"].array {
+                        if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "orderhandle") as? OrderHandleViewController {
+                            controller.modalTransitionStyle = .crossDissolve
+                            controller.modalPresentationStyle = .overFullScreen
+                            controller.arrayStep = array
+                            //controller.wfId = self!.wfId
+                            self?.present(controller, animated: true, completion: {
+                                
+                            })
+                        }
+                    }
+                }else{
+                    if let message = object["msg"].string , message.characters.count > 0 {
+                        Toast(text: message).show()
+                    }
+                }
+            }else{
+                Toast(text: "网络异常，请稍后重试").show()
+            }
+        }
+    }
+    
+    func loadEntrust() {
+        let hud = showHUD(text: "加载中...")
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWFGetEntrust, params: nil){
+            [weak self] (json , error) in
+            hud.hide(animated: true)
+            if let object = json {
+                if let result = object["result"].int , result == 1000 {
+                    if let array = object["data"].array {
+                        if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "waitworkhandle") as? WaitWorkHandleViewController {
+                            controller.modalTransitionStyle = .crossDissolve
+                            controller.modalPresentationStyle = .overFullScreen
+                            controller.arrayUser = array
+                            self?.present(controller, animated: true, completion: {
+                                
+                            })
+                        }
+                    }
+                }else{
+                    if let message = object["msg"].string , message.characters.count > 0 {
+                        Toast(text: message).show()
+                    }
+                }
+            }else{
+                Toast(text: "网络异常，请稍后重试").show()
+            }
+        }
     }
 
 }

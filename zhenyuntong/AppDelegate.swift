@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate  {
 
     var window: UIWindow?
     //var clientSocket : GCDAsyncSocket?
+    var _mapManager: BMKMapManager?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -73,6 +74,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate  {
         //createDB()
         
         Bugly.start(withAppId: "a105156434")
+        
+        _mapManager = BMKMapManager()
+        // 如果要关注网络及授权验证事件，请设定generalDelegate参数
+        let ret = _mapManager?.start("4EPSALve9pBxDUL8SKKGgW2xznTfZg0I", generalDelegate: nil)
+        if ret == false {
+            print("manager start failed!")
+        }
         
         return true
     }

@@ -32,6 +32,7 @@ target 'AntService' do
     #pod 'KeychainAccess'
     
     pod 'Bugly'
+    pod 'BaiduMapKit'
 
 end
 

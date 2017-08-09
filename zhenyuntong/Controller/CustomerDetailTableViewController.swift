@@ -25,7 +25,7 @@ class CustomerDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: 64)
+        tableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: 124)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,8 +160,8 @@ class CustomerDetailTableViewController: UITableViewController {
         }
         
         if let imageView = cell.viewWithTag(5) as? UIImageView {
-            if indexPath.row == 2 || indexPath.row == 3 {
-                if indexPath.row == 2 {
+            if indexPath.row == 3 || indexPath.row == 4 {
+                if indexPath.row == 3 {
                     if let mobile = data["mobile"].string ,mobile.characters.count > 0 {
                         imageView.isHidden = false
                     }else{
@@ -189,7 +189,7 @@ class CustomerDetailTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 2 {
+        if indexPath.row == 3 {
             if MODELITEM == "外出模式" {
                 if let phone = data["mobile"].string {
                     openUrlForCall(mobile: phone)
@@ -199,7 +199,7 @@ class CustomerDetailTableViewController: UITableViewController {
             }
             
             
-        }else if indexPath.row == 3 {
+        }else if indexPath.row == 4 {
             if MODELITEM == "外出模式" {
                 if let mobile = data["phone"].string {
                     openUrlForCall(mobile: mobile)
@@ -256,4 +256,14 @@ class CustomerDetailTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func signIn(_ sender: Any) {
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "signin") as? SignInViewController {
+            controller.cid = Int(data?["id"].string ?? "") ?? 0
+            controller.modalTransitionStyle = .crossDissolve
+            controller.modalPresentationStyle = .overFullScreen
+            self.present(controller, animated: true, completion: { 
+                
+            })
+        }
+    }
 }

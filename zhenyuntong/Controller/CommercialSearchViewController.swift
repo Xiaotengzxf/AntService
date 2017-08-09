@@ -41,19 +41,13 @@ class CommercialSearchViewController: UIViewController, IQDropDownTextFieldDataS
     }
 
     @IBAction func search(_ sender: Any) {
-        guard let name = tfAppName.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-            Toast(text: "请输入商机名称或备注").show()
-            return
-        }
-        if stateId == 0 || type == "" {
-            Toast(text: "请至少选择一个查询条件").show()
-            return
-        }
+        let name = tfAppName.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if let controller = self.storyboard?.instantiateViewController(withIdentifier: "commerciallist") as? ZXFCommercialListTableViewController {
             controller.search = name
             controller.state = stateId
             controller.bSearch = true
             controller.type = type
+            controller.includeMy = btnMe.isSelected ? "y" : "n"
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }

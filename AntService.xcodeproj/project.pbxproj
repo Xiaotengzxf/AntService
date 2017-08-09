@@ -98,6 +98,9 @@
 		8978CAE31E921AB400BBC926 /* DialogDepTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8978CAE21E921AB400BBC926 /* DialogDepTableViewController.swift */; };
 		8978CAEB1E93D40900BBC926 /* WaitWorkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8978CAEA1E93D40800BBC926 /* WaitWorkTableViewCell.swift */; };
 		89847E251E9FD68D00B02D01 /* ic_home_banner.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 89847E241E9FD68D00B02D01 /* ic_home_banner.jpg */; };
+		8984DA671F1D0B9000F80B03 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984DA661F1D0B9000F80B03 /* SignInViewController.swift */; };
+		8984DA691F1E526E00F80B03 /* CommercialHandleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984DA681F1E526E00F80B03 /* CommercialHandleViewController.swift */; };
+		8984DA6B1F1E60B500F80B03 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8984DA6A1F1E60B500F80B03 /* MapKit.framework */; };
 		8987F6871E8585B0008E54AD /* QuoteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F6861E8585B0008E54AD /* QuoteTableViewController.swift */; };
 		8987F6891E858A84008E54AD /* QuoteDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F6881E858A84008E54AD /* QuoteDetailTableViewController.swift */; };
 		8987F68C1E860ADE008E54AD /* CallTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8987F68B1E860ADE008E54AD /* CallTableViewController.swift */; };
@@ -248,6 +251,9 @@
 		8978CAE21E921AB400BBC926 /* DialogDepTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogDepTableViewController.swift; sourceTree = "<group>"; };
 		8978CAEA1E93D40800BBC926 /* WaitWorkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitWorkTableViewCell.swift; sourceTree = "<group>"; };
 		89847E241E9FD68D00B02D01 /* ic_home_banner.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ic_home_banner.jpg; sourceTree = "<group>"; };
+		8984DA661F1D0B9000F80B03 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		8984DA681F1E526E00F80B03 /* CommercialHandleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommercialHandleViewController.swift; sourceTree = "<group>"; };
+		8984DA6A1F1E60B500F80B03 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8987F6861E8585B0008E54AD /* QuoteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteTableViewController.swift; sourceTree = "<group>"; };
 		8987F6881E858A84008E54AD /* QuoteDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteDetailTableViewController.swift; sourceTree = "<group>"; };
 		8987F68B1E860ADE008E54AD /* CallTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallTableViewController.swift; sourceTree = "<group>"; };
@@ -281,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8969132B1E8C07F300251D8F /* AVFoundation.framework in Frameworks */,
+				8984DA6B1F1E60B500F80B03 /* MapKit.framework in Frameworks */,
 				3BCCBACDF483366897470E55 /* Pods_AntService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +312,7 @@
 		5A34E55289F269E1480A3141 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8984DA6A1F1E60B500F80B03 /* MapKit.framework */,
 				8969132A1E8C07F300251D8F /* AVFoundation.framework */,
 				891BF4471E18EE8C0018CE3C /* Photos.framework */,
 				347A2EECA75C05E1CFCE38FF /* Pods_zhenyuntong.framework */,
@@ -376,6 +384,8 @@
 				893101021F0B670D00B65426 /* CommercialAddViewController.swift */,
 				8931010E1F0CDD1200B65426 /* CommercialSettingViewController.swift */,
 				893DAFAC1F0F8AF90018553B /* CommercialSearchViewController.swift */,
+				8984DA661F1D0B9000F80B03 /* SignInViewController.swift */,
+				8984DA681F1E526E00F80B03 /* CommercialHandleViewController.swift */,
 			);
 			name = Commercial;
 			sourceTree = "<group>";
@@ -741,6 +751,9 @@
 							com.apple.Keychain = {
 								enabled = 0;
 							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
 						};
 					};
 					8915E6661DF26EF800B083B4 = {
@@ -942,6 +955,7 @@
 				89965D791EA26A3A006560BA /* CommitView.swift in Sources */,
 				893101051F0B706F00B65426 /* radioButton.swift in Sources */,
 				89399B291E8026B30059BFC7 /* ContractTableViewController.swift in Sources */,
+				8984DA671F1D0B9000F80B03 /* SignInViewController.swift in Sources */,
 				891B77491E82C94800CDD012 /* DialogNewViewController.swift in Sources */,
 				8931010F1F0CDD1200B65426 /* CommercialSettingViewController.swift in Sources */,
 				894721AF1DFAFC44002E0A60 /* ModifyPwdViewController.swift in Sources */,
@@ -962,6 +976,7 @@
 				895385B81E0E1E90009ECD2E /* CommonTableViewCell.swift in Sources */,
 				8913666C1E0510D1006C0AFA /* EmptyView.swift in Sources */,
 				891366761E058619006C0AFA /* CommentView.swift in Sources */,
+				8984DA691F1E526E00F80B03 /* CommercialHandleViewController.swift in Sources */,
 				894721BA1DFC78BB002E0A60 /* PlaceholderTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

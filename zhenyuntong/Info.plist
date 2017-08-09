@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.6</string>
+	<string>1.4</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -73,6 +73,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>蚂蚁客服需要访问相机权限</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>蚂蚁客服需要访问定位服务</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>蚂蚁客服需要访问定位服务</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>蚂蚁客服需要访问相册权限</string>
 	<key>UILaunchStoryboardName</key>

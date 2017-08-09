@@ -199,6 +199,10 @@ class CommercialAddViewController: UIViewController, ProductListTableViewControl
             Toast(text: "请选择商机类型").show()
             return
         }
+        guard let name = tfFrom.text?.trimmingCharacters(in: .whitespacesAndNewlines) , name.characters.count > 0 else {
+            Toast(text: "请输入商机名称").show()
+            return
+        }
         if !btnRadio.first!.isSelected {
             if wf_step == 0 {
                 Toast(text: "请选择步骤").show()
@@ -208,10 +212,6 @@ class CommercialAddViewController: UIViewController, ProductListTableViewControl
                 Toast(text: "请选择商机指派人").show()
                 return
             }
-        }
-        guard let name = tfFrom.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-            Toast(text: "请输入商机名称").show()
-            return
         }
         let remark = tvRemark.text.trimmingCharacters(in: .whitespacesAndNewlines)
         var params : [String : String] = ["cust_id" : cust_id, "actbus" : (btnRadio.first!.isSelected ? "n" : "y"), "step" : (btnRadio.first!.isSelected ? "" :"\(wf_step)"), "name" : name, "remark" : remark, "r_to" : (btnRadio.first!.isSelected ? "" :"\(wf_to)") , "type" : "\(oid)"]

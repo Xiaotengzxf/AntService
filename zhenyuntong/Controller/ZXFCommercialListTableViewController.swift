@@ -25,6 +25,8 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     var type = ""
     var includeMy = "n"
     var row = 0
+    var tabPage : TabPageViewController!
+    var stepId = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +69,7 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     
     // MARK: - mothd
     func loadData() {
-        var params : [String : Any] = ["type" : type, "state" : state, "page" : page, "searchdata" : search]
+        var params : [String : Any] = ["type" : type, "state" : (state == 0 ? "" : "\(state)"), "page" : page, "seachdata" : search]
         if bSearch {
             params["includeMy"] = includeMy
         }
@@ -75,25 +77,33 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
             self?.tableView.mj_header.endRefreshing()
             self?.tableView.mj_footer.endRefreshing()
             if let object = json {
-                if let result = object["result"].int , result == 1000 {
-                    if self!.page == 0 {
-                        self?.data.removeAll()
-                    }
-                    if let records = object["records"].int {
-                        if records < 20 {
-                            self?.tableView.mj_footer.endRefreshingWithNoMoreData()
+                if let result = object["result"].int {
+                    if result == 1000 {
+                        if self!.page == 0 {
+                            self?.data.removeAll()
+                        }
+                        if let records = object["records"].int {
+                            if records < 20 {
+                                self?.tableView.mj_footer.endRefreshingWithNoMoreData()
+                            }
+                        }
+                        if let arr = object["data"].array {
+                            self!.data += arr
+                        }
+                        if self?.data.count == 0 {
+                            self?.nShowEmpty = 3
+                            self?.tableView.mj_footer.isHidden = true
+                        }else{
+                            self?.tableView.mj_footer.isHidden = false
+                        }
+                        self?.tableView.reloadData()
+                    }else if result == 1004 {
+                        if self?.page == 0 && self?.data.count ?? 0 == 0{
+                            self?.nShowEmpty = 1
+                            self?.tableView.reloadData()
                         }
                     }
-                    if let arr = object["data"].array {
-                        self!.data += arr
-                    }
-                    if self?.data.count == 0 {
-                        self?.nShowEmpty = 3
-                        self?.tableView.mj_footer.isHidden = true
-                    }else{
-                        self?.tableView.mj_footer.isHidden = false
-                    }
-                    self?.tableView.reloadData()
+                    
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {
                         Toast(text: message).show()
@@ -125,6 +135,9 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                         }
                     }
                 }
+            }else if tag == 2 {
+                tabPage.navigationController?.popViewController(animated: true)
+                self.tableView.mj_header.beginRefreshing()
             }
         }
     }
@@ -168,12 +181,13 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
             hud.hide(animated: true)
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
-                    let page = TabPageViewController.create()
-                    page.title = "商机详情"
+                    self!.tabPage = TabPageViewController.create()
+                    self!.tabPage.title = "商机详情"
                     guard let detail = self?.storyboard?.instantiateViewController(withIdentifier: "commercialdetail") as? CommercialDetailTableViewController else {
                         return
                     }
                     detail.data = object["data"]
+                    self!.stepId = object["data", "dealRecord"].arrayValue.count
                     guard let flow = self?.storyboard?.instantiateViewController(withIdentifier: "commercialflow") as? CommercialFlowTableViewController else {
                         return
                     }
@@ -183,13 +197,25 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                     option.isTranslucent = false
                     option.tabHeight = 44
                     option.tabWidth = SCREENWIDTH / 2
-                    page.option = option
-                    page.tabItems = [(detail, "商机详情"), (flow, "商机流程")]
-                    page.hidesBottomBarWhenPushed = true
+                    self!.tabPage.option = option
+                    self!.tabPage.tabItems = [(detail, "商机详情"), (flow, "商机流程")]
+                    self!.tabPage.hidesBottomBarWhenPushed = true
                     if self!.state == 1 || self!.state == 2 {
-                        page.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "操作", style: .plain, target: self, action: #selector(ZXFCommercialListTableViewController.handleDetailEvent(sender:)))
+                        if self!.state == 2 {
+                            if let dealRecord = object["data", "dealRecord"].array {
+                                let r_to = dealRecord.last!["r_to"].stringValue
+                                let userinfo = UserDefaults.standard.object(forKey: "mine") as? [String : Any]
+                                let pId = userinfo?["id"] as? String ?? ""
+                                if dealRecord.count > 0 && r_to == pId {
+                                    self!.tabPage.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "操作", style: .plain, target: self, action: #selector(ZXFCommercialListTableViewController.handleDetailEvent(sender:)))
+                                }
+                            }
+                        }else{
+                            self!.tabPage.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "发起商机", style: .plain, target: self, action: #selector(ZXFCommercialListTableViewController.handleDetailEvent(sender:)))
+                        }
+                        
                     }
-                    self?.navigationController?.pushViewController(page, animated: true)
+                    self?.navigationController?.pushViewController(self!.tabPage, animated: true)
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {
                         Toast(text: message).show()
@@ -276,10 +302,10 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     }
     
     func handleDetailEvent(sender : Any) {
-        if state == 1 {
+        if state == 2 {
             let sheet = UIAlertController(title: "操作", message: nil, preferredStyle: .actionSheet)
             sheet.addAction(UIAlertAction(title: "处理", style: .default, handler: {[weak self] (action) in
-                self?.loadNext()
+                self?.loadNext(b: true)
             }))
             sheet.addAction(UIAlertAction(title: "委托", style: .default, handler: {[weak self] (action) in
                 self?.loadEntrust()
@@ -288,7 +314,8 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                 if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "waitworkclear") as? WaitWorkClearViewController {
                     controller.modalTransitionStyle = .crossDissolve
                     controller.modalPresentationStyle = .overFullScreen
-                    //controller.wfId = self!.wfId
+                    controller.wfId = Int(self!.data[self!.row]["id"].stringValue) ?? 0
+                    controller.bCommercial = true
                     self?.present(controller, animated: true, completion: {
                         
                     })
@@ -301,33 +328,25 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                 
             }
         }else {
-            let action = UIAlertController(title: "操作", message: nil, preferredStyle: .actionSheet)
-            action.addAction(UIAlertAction(title: "指派", style: .default, handler: {[weak self] (action) in
-                self?.performSegue(withIdentifier: "userlist", sender: self)
-            }))
-            action.addAction(UIAlertAction(title: "闭单", style: .default, handler: {[weak self] (action) in
-                //self?.closeOrder()
-            }))
-            self.present(action, animated: true) {
-                
-            }
+            self.loadNext(b: false)
         }
         
     }
     
-    func loadNext() {
+    func loadNext(b : Bool) {
         let hud = showHUD(text: "加载中...")
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoList, params: nil){
+        NetworkManager.installshared.request(type: .post, url: state == 2 ? NetworkManager.installshared.appOppoDispose : NetworkManager.installshared.appOppoLaunch, params: ["id" : data[row]["id"].stringValue]){
             [weak self] (json , error) in
             hud.hide(animated: true)
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
                     if let array = object["data"].array {
-                        if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "orderhandle") as? OrderHandleViewController {
+                        if let controller = self?.storyboard?.instantiateViewController(withIdentifier: "commercialhandle") as? CommercialHandleViewController {
                             controller.modalTransitionStyle = .crossDissolve
                             controller.modalPresentationStyle = .overFullScreen
                             controller.arrayStep = array
-                            //controller.wfId = self!.wfId
+                            controller.wfId = Int(self!.data[self!.row]["id"].stringValue) ?? 0
+                            controller.bComerical = b
                             self?.present(controller, animated: true, completion: {
                                 
                             })
@@ -346,7 +365,7 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
     
     func loadEntrust() {
         let hud = showHUD(text: "加载中...")
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWFGetEntrust, params: nil){
+        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appOppoAllot, params: ["id" : data[row]["id"].stringValue, "setpid" : "1"]){
             [weak self] (json , error) in
             hud.hide(animated: true)
             if let object = json {
@@ -356,6 +375,9 @@ class ZXFCommercialListTableViewController: UITableViewController, DZNEmptyDataS
                             controller.modalTransitionStyle = .crossDissolve
                             controller.modalPresentationStyle = .overFullScreen
                             controller.arrayUser = array
+                            controller.bCommercial = true
+                            controller.wfId = Int(self!.data[self!.row]["id"].stringValue) ?? 0
+                            controller.stepId = self!.stepId + 1
                             self?.present(controller, animated: true, completion: {
                                 
                             })

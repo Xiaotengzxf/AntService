@@ -14,14 +14,18 @@ class WaitWorkHandleViewController: UIViewController , IQDropDownTextFieldDelega
 
     @IBOutlet weak var idtfUser: IQDropDownTextField!
     @IBOutlet weak var tvReason: PlaceholderTextView!
+    @IBOutlet weak var lblTitle: UILabel!
     var arrayUser : [JSON]!
     var wfId = 0
     var userId = ""
+    var bCommercial = false
+    var stepId = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         idtfUser.itemList = arrayUser.map{$0["name"].stringValue}
         idtfUser.isOptionalDropDown = false
+        lblTitle.text = bCommercial ? "商机委托" : "委托工作流"
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,13 +52,17 @@ class WaitWorkHandleViewController: UIViewController , IQDropDownTextFieldDelega
             return
         }
         let hud = showHUD(text: "保存中...")
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWFEntrust, params: ["wf_id" : "\(wfId)" , "ent_remark" : reason , "ent_to" : userId]) {[weak self] (json, error) in
+        var params : [String : Any] = [bCommercial ? "id" : "wf_id" : "\(wfId)" , bCommercial ? "remark" : "ent_remark" : reason , "ent_to" : userId]
+        if bCommercial {
+            params["stepid"] = "\(stepId)"
+        }
+        NetworkManager.installshared.request(type: .post, url: bCommercial ? NetworkManager.installshared.appOppoEntrust : NetworkManager.installshared.appWFEntrust, params: params) {[weak self] (json, error) in
             hud.hide(animated: true)
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
                     Toast(text: "保存成功").show()
                     self?.dismiss(animated: true, completion: { 
-                        NotificationCenter.default.post(name: Notification.Name("waitworkdetail"), object: 2)
+                        NotificationCenter.default.post(name: Notification.Name("commerciallist"), object: 2)
                     })
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {

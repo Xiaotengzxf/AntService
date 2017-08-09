@@ -74,7 +74,10 @@ class OrderDetailTableViewController: UITableViewController {
         action.addAction(UIAlertAction(title: "闭单", style: .default, handler: {[weak self] (action) in
             self?.closeOrder()
         }))
-        self.present(action, animated: true) { 
+        action.addAction(UIAlertAction(title: "取消", style: .cancel, handler: { (action) in
+            
+        }))
+        self.present(action, animated: true) {
             
         }
         

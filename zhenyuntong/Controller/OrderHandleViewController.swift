@@ -19,6 +19,7 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
     @IBOutlet weak var idtfNext: IQDropDownTextField!
     @IBOutlet weak var idtfUser: IQDropDownTextField!
     @IBOutlet weak var lblAccessory: UILabel!
+    @IBOutlet weak var lblTitle: UILabel!
     var arrayStep : [JSON]!
     var arrayUser : [JSON]!
     var wfId = 0
@@ -72,6 +73,7 @@ class OrderHandleViewController: UIViewController , IQDropDownTextFieldDelegate 
         if !bFinished {
             params["hand_wf_to"] = to_user
         }
+        
         NetworkManager.installshared.upload(url: NetworkManager.installshared.appWFSaveHandle, params: params, data: (image != nil ? UIImageJPEGRepresentation(image!, 0.2) : nil)) {[weak self] (json, error) in
             hud.hide(animated: true)
             if let object = json {

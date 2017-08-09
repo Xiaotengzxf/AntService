@@ -13,12 +13,17 @@ import Toaster
 class WaitWorkClearViewController: UIViewController {
 
     @IBOutlet weak var tvReason: PlaceholderTextView!
+    @IBOutlet weak var lblTitle: UILabel!
     var wfId = 0
+    var bCommercial = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if bCommercial {
+            lblTitle.text = "销毁商机"
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,13 +45,13 @@ class WaitWorkClearViewController: UIViewController {
             return
         }
         let hud = showHUD(text: "保存中...")
-        NetworkManager.installshared.request(type: .post, url: NetworkManager.installshared.appWFClose, params: ["wf_id" : "\(wfId)" , "remark" : remark]) {[weak self] (json, error) in
+        NetworkManager.installshared.request(type: .post, url: bCommercial ? NetworkManager.installshared.appOppoClosure : NetworkManager.installshared.appWFClose, params: [bCommercial ? "id" : "wf_id" : "\(wfId)" , "remark" : remark]) {[weak self] (json, error) in
             hud.hide(animated: true)
             if let object = json {
                 if let result = object["result"].int , result == 1000 {
                     Toast(text: "销毁成功").show()
                     self?.dismiss(animated: true, completion: {
-                        
+                        NotificationCenter.default.post(name: Notification.Name("commerciallist"), object: 2)
                     })
                 }else{
                     if let message = object["msg"].string , message.characters.count > 0 {

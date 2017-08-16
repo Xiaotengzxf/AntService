@@ -33,6 +33,8 @@ class SignInViewController: UIViewController, BMKLocationServiceDelegate {
         vAccessory.addGestureRecognizer(tap)
         
         _locService = BMKLocationService()
+        _locService?.distanceFilter = kCLLocationAccuracyBest
+        _locService?.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         _locService?.delegate = self
         //启动LocationService
         _locService?.startUserLocationService()

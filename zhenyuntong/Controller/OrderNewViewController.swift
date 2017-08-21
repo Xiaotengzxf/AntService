@@ -37,7 +37,7 @@ class OrderNewViewController: UIViewController {
         tfQuestion.isUserInteractionEnabled = false
         vHandler.layer.borderColor = UIColor(red: 220/255.0, green: 220/255.0, blue: 220/255.0, alpha: 1).cgColor
         vHandler.layer.borderWidth = 0.5
-        let tap = UITapGestureRecognizer(target: self, action: #selector(OrderNewViewController.tap(recognizer:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.tap(recognizer:)))
         vHandler.addGestureRecognizer(tap)
         loadData()
         NotificationCenter.default.addObserver(self, selector: #selector(OrderNewViewController.handleNotification(notification:)), name: Notification.Name("ordernew"), object: nil)

@@ -17,6 +17,7 @@ class CustomerDetailTableViewController: UITableViewController {
                   "地        址：" , "备        注："]
     var data : JSON!
     @IBOutlet weak var footerView: UIView!
+    @IBOutlet weak var lcTop: NSLayoutConstraint!
     var x : CGFloat = 16
     var y : CGFloat = 10
     var labels : [String] = []
@@ -26,6 +27,7 @@ class CustomerDetailTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: 124)
+        //footerView.backgroundColor = UIColor.red
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,14 +96,29 @@ class CustomerDetailTableViewController: UITableViewController {
                                     }
                                 }
                                 if count > 0 {
-                                    self?.footerView?.bounds = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: self!.y + 40)
-                                    self?.tableView.tableFooterView?.bounds = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: self!.y + 40)
+                                    self!.y += 40
+                                    self?.lcTop.constant = self!.y + 10
+//                                    self?.footerView?.bounds = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: self!.y + 124)
+//                                    self?.tableView.tableFooterView?.bounds = CGRect(x: 0, y: 0, width: SCREENWIDTH, height: self!.y + 124)
                                 }
                             }
                             
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let footView = tableView.tableFooterView {
+            let height = self.y + 124
+            if height != footerView.frame.height {
+                print("new height=\(height)")
+                footView.frame.size.height = height
+                tableView.tableFooterView = footView
             }
         }
     }

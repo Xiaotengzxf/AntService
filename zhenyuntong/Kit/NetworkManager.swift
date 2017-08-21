@@ -80,6 +80,7 @@ class NetworkManager {
     let appOppoLaunch = "appOppoLaunch.html"
     let appSavelaunch = "appSavelaunch.html"
     let appPunchOut = "appPunchOut.html"
+    let appCustConnType = "appCustConnType.html"
     
     func macAddress() -> String {
         if let mac = UserDefaults.standard.string(forKey: "domain") {

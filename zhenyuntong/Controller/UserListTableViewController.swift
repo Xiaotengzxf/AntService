@@ -23,6 +23,7 @@ class UserListTableViewController: UITableViewController, DZNEmptyDataSetDelegat
     var bSearch = false
     var nShowEmpty = 2 // 1 无数据 2 加载中 3 无网络
     var search = ""
+    var bSingle = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +33,12 @@ class UserListTableViewController: UITableViewController, DZNEmptyDataSetDelegat
             tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(UserListTableViewController.handleNotification(notification:)), name: Notification.Name("userlist"), object: nil)
-        if bSearch {
+        if bSearch || bSingle {
             navigationItem.rightBarButtonItem = nil
         }
         tableView.tableFooterView = UIView()
+        
+        self.title = "选择归属人"
     }
 
     override func didReceiveMemoryWarning() {
@@ -214,12 +217,18 @@ class UserListTableViewController: UITableViewController, DZNEmptyDataSetDelegat
             if bSearch == false {
                 if let array = capital[indexes[indexPath.section]] {
                     let json = data[array[indexPath.row]]
-                    if flag == 0 {
-                        let dict = json?.dictionaryValue
-                        NotificationCenter.default.post(name: Notification.Name(NotificationName.OrderDetail.rawValue), object: 1, userInfo: dict)
-                    }else if flag == 1 {
-                        NotificationCenter.default.post(name: Notification.Name("ordernew"), object: 1, userInfo: json?.dictionaryValue)
+                    
+                    if bSingle {
+                        NotificationCenter.default.post(name: Notification.Name("CustomerSearch"), object: 1, userInfo: json?.dictionaryValue)
+                    }else{
+                        if flag == 0 {
+                            let dict = json?.dictionaryValue
+                            NotificationCenter.default.post(name: Notification.Name(NotificationName.OrderDetail.rawValue), object: 1, userInfo: dict)
+                        }else if flag == 1 {
+                            NotificationCenter.default.post(name: Notification.Name("ordernew"), object: 1, userInfo: json?.dictionaryValue)
+                        }
                     }
+                    
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }
@@ -292,7 +301,7 @@ class UserListTableViewController: UITableViewController, DZNEmptyDataSetDelegat
     func imageAnimation(forEmptyDataSet scrollView: UIScrollView!) -> CAAnimation! {
         let animation = CABasicAnimation(keyPath: "transform")
         animation.fromValue = NSValue(caTransform3D: CATransform3DMakeRotation(0.0, 0.0, 0.0, 1.0))
-        animation.toValue = NSValue(caTransform3D: CATransform3DMakeRotation(CGFloat(M_PI_2), 0.0, 0.0, 1.0))
+        animation.toValue = NSValue(caTransform3D: CATransform3DMakeRotation(CGFloat(Double.pi / 2), 0.0, 0.0, 1.0))
         animation.duration = 0.5
         animation.isCumulative = true
         animation.repeatCount = MAXFLOAT

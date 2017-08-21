@@ -25,6 +25,7 @@
 		891B77491E82C94800CDD012 /* DialogNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891B77481E82C94800CDD012 /* DialogNewViewController.swift */; };
 		891DC49B1E080E4A00E2B0D6 /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891DC4991E080E4A00E2B0D6 /* NewsTableViewController.swift */; };
 		891DC49C1E080E4A00E2B0D6 /* CommonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891DC49A1E080E4A00E2B0D6 /* CommonTableViewController.swift */; };
+		89217BEC1F48205E00E98D13 /* CustomerSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89217BEB1F48205E00E98D13 /* CustomerSearchViewController.swift */; };
 		8921C2271E096F3F007F1760 /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8921C2261E096F3F007F1760 /* DateManager.swift */; };
 		8921C2291E09712A007F1760 /* VerticalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8921C2281E09712A007F1760 /* VerticalViewController.swift */; };
 		8921C22C1E0971F3007F1760 /* MCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8921C22A1E0971F3007F1760 /* MCollectionReusableView.swift */; };
@@ -173,6 +174,7 @@
 		891BF4471E18EE8C0018CE3C /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		891DC4991E080E4A00E2B0D6 /* NewsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
 		891DC49A1E080E4A00E2B0D6 /* CommonTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonTableViewController.swift; sourceTree = "<group>"; };
+		89217BEB1F48205E00E98D13 /* CustomerSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerSearchViewController.swift; sourceTree = "<group>"; };
 		8921C2261E096F3F007F1760 /* DateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		8921C2281E09712A007F1760 /* VerticalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerticalViewController.swift; sourceTree = "<group>"; };
 		8921C22A1E0971F3007F1760 /* MCollectionReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MCollectionReusableView.swift; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 				891DC4991E080E4A00E2B0D6 /* NewsTableViewController.swift */,
 				8921C2281E09712A007F1760 /* VerticalViewController.swift */,
 				89162AFA1E0ABCAB00181BC5 /* SearchViewController.swift */,
+				89217BEB1F48205E00E98D13 /* CustomerSearchViewController.swift */,
 				8978C36C1E1514FD00AFA20D /* FoundPwdViewController.swift */,
 				8978C36E1E15151800AFA20D /* SettingNewPwdViewController.swift */,
 				898916DE1E7E460100BE6848 /* OrganizationTableViewController.swift */,
@@ -900,6 +903,7 @@
 				894C7A481E02E3E6001B55E9 /* CommunityEventViewController.swift in Sources */,
 				894721BE1DFC8539002E0A60 /* AttentionTableViewController.swift in Sources */,
 				8978C36F1E15151800AFA20D /* SettingNewPwdViewController.swift in Sources */,
+				89217BEC1F48205E00E98D13 /* CustomerSearchViewController.swift in Sources */,
 				893101091F0BA57300B65426 /* ProductTableViewCell.swift in Sources */,
 				8951F9F31E11466A0004D391 /* SQLManager.swift in Sources */,
 				89399B251E8013100059BFC7 /* ProductManageTableViewController.swift in Sources */,

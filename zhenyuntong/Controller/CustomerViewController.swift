@@ -26,6 +26,7 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
     var bSearch = false
     var connLabel = ""
     var search = ""
+    var params : [String : String] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +41,10 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
             self!.page += 1
             self?.loadData()
         })
-        NotificationCenter.default.addObserver(self, selector: #selector(CustomerViewController.handleNotification(sender:)), name: Notification.Name("customer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleNotification(sender:)), name: Notification.Name("customer"), object: nil)
         
         if bSearch {
+            self.title  = "搜索结果"
             self.navigationItem.rightBarButtonItems = nil
             self.navigationItem.rightBarButtonItem = nil
         }else{
@@ -84,14 +86,8 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
     }
     
     @IBAction func search(_ sender: Any) {
-        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "search") as? SearchViewController {
-            controller.modalTransitionStyle = .crossDissolve
-            controller.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            controller.modalPresentationStyle = .overFullScreen
-            controller.searchName = "customer"
-            self.present(controller, animated: true, completion: {
-                
-            })
+        if let controller = self.storyboard?.instantiateViewController(withIdentifier: "CustomerSearch") as? CustomerSearchViewController {
+            self.navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -120,7 +116,12 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
     // MARK: - 自定义方法
     
     func loadData() {
-        var params : [String : Any] = ["search" : search , "page" : page, "sidx" : sidx]
+        var params : [String : Any] = [:]
+        if bSearch {
+            params = self.params
+        }else{
+            params = ["search" : search , "page" : page, "sidx" : sidx]
+        }
         if connLabel.characters.count > 0 {
             params["connLabel"] = connLabel
         }

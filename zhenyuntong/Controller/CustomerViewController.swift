@@ -63,7 +63,7 @@ class CustomerViewController: UIViewController , UITableViewDataSource , UITable
             vTitle.addSubview(ivArrow)
             self.navigationItem.titleView = vTitle
         }
-        
+        tableView.mj_footer.isHidden = true
         
     }
     

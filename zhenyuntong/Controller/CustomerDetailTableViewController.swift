@@ -208,7 +208,7 @@ class CustomerDetailTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 3 {
             if MODELITEM == "外出模式" {
-                if let phone = data["mobile"].string {
+                if let phone = data["hp_mobile"].string {
                     openUrlForCall(mobile: phone)
                 }
             }else{
@@ -218,7 +218,7 @@ class CustomerDetailTableViewController: UITableViewController {
             
         }else if indexPath.row == 4 {
             if MODELITEM == "外出模式" {
-                if let mobile = data["phone"].string {
+                if let mobile = data["hp_phone"].string {
                     openUrlForCall(mobile: mobile)
                 }
             }else{
